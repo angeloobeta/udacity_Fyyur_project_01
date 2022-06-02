@@ -10,7 +10,13 @@ DEBUG = True
 
 
 # TODO IMPLEMENT DATABASE URL
-USERNAME = os.environ.get('POSTGRES_USERNAME')
-PASSWORD = os.getenv('POSTGRES_PASSWORD')
-SQLALCHEMY_DATABASE_URI = f'postgresql://{USERNAME}:{PASSWORD}@localhost:5432/Fyyur_artist_booking_site'
+username = os.environ.get('POSTGRES_USERNAME')
+password = os.environ.get('POSTGRES_PASSWORD')
+localhost = os.environ.get('POSTGRES_HOST')
+port = os.environ.get('POSTGRES_PORT')
+SQLALCHEMY_DATABASE_URI = f'postgresql://{username}:{password}@{{localhost}}:{port}/Fyyur_artist_booking_site'
+
+# SQLALCHEMY_DATABASE_URI = f'postgresql://{username}:{password}@{localhost}:{port}/todoapp'
+# alter user postgres password 'yourpassword';
+
 
