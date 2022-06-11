@@ -3,3 +3,11 @@ python-dateutil==2.6.0
 flask-moment==0.11.0
 flask-wtf==0.14.3
 flask_sqlalchemy==2.4.4
+Flask-Migrate
+Flask~=2.1.2
+WTForms~=3.0.1
+# Flask == 2.0.3
+postgres
+SQLAlchemy
+# Jinja2
+jinja2<3.1.0
