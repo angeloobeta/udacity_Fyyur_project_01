@@ -48,12 +48,12 @@ class Venue(db.Model):
     facebook_link = db.Column(db.String(120))
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
-    # genres = db.Column(db.String(120), nullable=False)
-    # website = db.Column(db.String(120))
-    # seeking_talent = db.Column(db.Boolean, default=False)
-    # seeking_description = db.Column(db.Text)
-    # upcoming_shows_count = db.Column(db.Integer, default=0)
-    # past_shows_count = db.Column(db.Integer, default=0)
+    genres = db.Column(db.String(120), nullable=False)
+    website = db.Column(db.String(120))
+    seeking_talent = db.Column(db.Boolean, default=False)
+    seeking_description = db.Column(db.Text)
+    upcoming_shows_count = db.Column(db.Integer, default=0)
+    past_shows_count = db.Column(db.Integer, default=0)
     shows = db.relationship('Show', backref='venue', lazy=True)
 
 
@@ -70,11 +70,11 @@ class Artist(db.Model):
     facebook_link = db.Column(db.String(120))
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
-    # website = db.Column(db.String(120))
-    # seeking_venue = db.Column(db.Boolean, default=False)
-    # seeking_description = db.Column(db.Text)
-    # upcoming_shows_count = db.Column(db.Integer, default=0)
-    # past_shows_count = db.Column(db.Integer, default=0)
+    website = db.Column(db.String(120))
+    seeking_venue = db.Column(db.Boolean, default=False)
+    seeking_description = db.Column(db.Text)
+    upcoming_shows_count = db.Column(db.Integer, default=0)
+    past_shows_count = db.Column(db.Integer, default=0)
     shows = db.relationship('Show', backref='artist', lazy=True)
 
 
