@@ -24,13 +24,14 @@ moment = Moment(app)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 
-
 # TODO: connect to a local postgresql database
 
 app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['DEBUG'] = True
 migration = Migrate(app, db)
+
+
 # ----------------------------------------------------------------------------#
 # Models.
 # ----------------------------------------------------------------------------#
@@ -80,11 +81,13 @@ class Artist(db.Model):
 
 # TODO Implement Show and Artist models, and complete all model relationships and properties, as a database migration.
 class Shows(db.Model):
-  __tablename__ = 'Shows'
-  id = db.Column(db.Integer,primary_key=True)
-  venue_id = db.Column(db.Integer,db.ForeignKey('Venue.id'),nullable=False)
-  artist_id = db.Column(db.Integer,db.ForeignKey('Artist.id'),nullable=False)
-  start_time = db.Column(db.String())
+    __tablename__ = 'Shows'
+    id = db.Column(db.Integer, primary_key=True)
+    venue_id = db.Column(db.Integer, db.ForeignKey('Venue.id'), nullable=False)
+    artist_id = db.Column(db.Integer, db.ForeignKey('Artist.id'), nullable=False)
+    start_time = db.Column(db.String())
+
+
 # ----------------------------------------------------------------------------#
 # Filters.
 # ----------------------------------------------------------------------------#
@@ -279,7 +282,7 @@ def show_venue(venue_id):
         show_info = {
             "artist_id": show.artist_id,
             "artist_name": show.artist.name,
-            "artist_image_link":"https://images.unsplash.com/photo-1549213783-8284d0336c4f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80",
+            "artist_image_link": show.artist.image_link,
             "start_time": str(show.start_time)
         }
         if (show.upcoming):
@@ -296,7 +299,7 @@ def show_venue(venue_id):
         "phone": venue.phone,
         "facebook_link": venue.facebook_link,
         "seeking_talent": False,
-        "image_link": "https://images.unsplash.com/photo-1497032205916-ac775f0649ae?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80",
+        "image_link": venue.image_link,
         "past_shows": past_shows,
         "upcoming_shows": upcoming_shows,
         "past_shows_count": len(past_shows),
@@ -319,22 +322,22 @@ def create_venue_submission():
     # TODO: insert form data as a new Venue record in the db, instead
     name = request.form.get('name')
     city = request.form.get('city')
-    state= request.form.get('state')
+    state = request.form.get('state')
     address = request.form.get('address')
     phone = request.form.get('phone')
     genres = request.form.get('genres')
     facebook_link = request.form.get('facebook_link')
     # TODO: modify data to be the data object returned from db insertion
-    venue = Venue(name=name ,
-                  city=city ,
-                  state = state ,
-                  address = address ,
-                  phone =phone ,
-                  facebook_link=facebook_link )
+    venue = Venue(name=name,
+                  city=city,
+                  state=state,
+                  address=address,
+                  phone=phone,
+                  facebook_link=facebook_link)
     try:
         db.session.add(venue)
         db.session.commit()
-    # on successful db insert, flash success
+        # on successful db insert, flash success
         flash('Venue ' + request.form['name'] + ' was successfully listed!')
     except:
         db.session.rollback()
@@ -486,7 +489,7 @@ def show_artist(artist_id):
         show_info = {
             "venue_id": show.venue_id,
             "venue_name": show.venue.name,
-            "venue_image_link":"https://images.unsplash.com/photo-1543900694-133f37abaaa5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60",
+            "venue_image_link": show.venue.image_link,
             "start_time": str(show.start_time)
         }
         if (show.upcoming):
@@ -504,7 +507,7 @@ def show_artist(artist_id):
         "facebook_link": artist.facebook_link,
         "seeking_venue": artist.seeking_venue,
         "seeking_description": artist.seeking_description,
-        "image_link": "https://images.unsplash.com/photo-1497032205916-ac775f0649ae?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80",
+        "image_link": artist.image_link,
         "past_shows": past_shows,
         "upcoming_shows": upcoming_shows,
         "past_shows_count": len(past_shows),
@@ -703,7 +706,7 @@ def shows():
     shows_list = Show.query.all()
     data = []
     for show in shows_list:
-        if (show.upcoming):
+        if show.upcoming:
             data.append({
                 "venue_id": show.venue_id,
                 "venue_name": show.venue.name,
