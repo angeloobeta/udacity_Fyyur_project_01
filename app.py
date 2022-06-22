@@ -3,6 +3,8 @@
 # ----------------------------------------------------------------------------#
 
 import json
+import sys
+
 import dateutil.parser
 import babel
 from flask import Flask, render_template, request, Response, flash, redirect, url_for
@@ -52,9 +54,6 @@ class Venue(db.Model):
     website_link = db.Column(db.String(200))
 
     # TODO: implement any missing fields, as a database migration using Flask-Migrate
-    seeking_talent = db.Column(db.Boolean, default=False)
-    seeking_description = db.Column(db.Text)
-    website_link = db.Column(db.String(200))
 
 
 class Artist(db.Model):
@@ -137,8 +136,9 @@ def venues():
 @app.route('/venues/search', methods=['POST'])
 def search_venues():
     # TODO: implement search on artists with partial string search. Ensure it is case-insensitive.
-    # seach for Hop should return "The Musical Hop".
+    # search for Hop should return "The Musical Hop".
     # search for "Music" should return "The Musical Hop" and "Park Square Live Music & Coffee"
+    response = Venue.query.get()
     response = {
         "count": 1,
         "data": [{
@@ -248,13 +248,51 @@ def create_venue_form():
 @app.route('/venues/create', methods=['POST'])
 def create_venue_submission():
     # TODO: insert form data as a new Venue record in the db, instead
+    body = {}
+    try:
+        name = request.form.get('name', '')
+        city = request.form.get('city', '')
+        state = request.form('state', '')
+        address = request.form.get('address', '')
+        phone =  request.form.get('phone', '')
+        image_link = request.form.get('image_link', '')
+        facebook_link = request.form.get('facebook', '')
+        seeking_talent = request.form.get('seeking_talent', '')
+        seeking_description = request.form.get('seeking_description', '')
+        website_link = request.form.get('website_link', '')
     # TODO: modify data to be the data object returned from db insertion
-
+        venue = Venue(name=name,
+                      city=city,
+                      state=state,
+                      address=address,
+                      phone=phone,
+                      image_link=image_link,
+                      facebook_link=facebook_link,
+                      seeking_talent=seeking_talent,
+                      seeking_description=seeking_description,
+                      website_link=website_link)
+        db.session.add(venue)
+        db.session.commit()
+        # body['name'] = venue.name
+        # body['city']=venue.city
+        # body['state']=venue.state
+        # body['address']=venue.address
+        # body['phone']=venue.phone
+        # body['image_link']=venue.image_link
+        # body['facebook_link']=venue.facebook_link
+        # body['seeking_talent']=venue.seeking_talent
+        # body['seeking_description']=venue.seeking_description
+        # body['website_link']=venue.website_link
     # on successful db insert, flash success
-    flash('Venue ' + request.form['name'] + ' was successfully listed!')
+        flash('Venue ' + request.form['name'] + ' was successfully listed!')
     # TODO: on unsuccessful db insert, flash an error instead.
+    except:
+        db.session.rollback()
+        print(sys.exc_info())
     # e.g., flash('An error occurred. Venue ' + data.name + ' could not be listed.')
     # see: http://flask.pocoo.org/docs/1.0/patterns/flashing/
+    finally:
+        db.session.close()
     return render_template('pages/home.html')
 
 
@@ -273,16 +311,17 @@ def delete_venue(venue_id):
 @app.route('/artists')
 def artists():
     # TODO: replace with real data returned from querying the database
-    data = [{
-        "id": 4,
-        "name": "Guns N Petals",
-    }, {
-        "id": 5,
-        "name": "Matt Quevedo",
-    }, {
-        "id": 6,
-        "name": "The Wild Sax Band",
-    }]
+    data= Artist.query.get()
+    # data = [{
+    #     "id": 4,
+    #     "name": "Guns N Petals",
+    # }, {
+    #     "id": 5,
+    #     "name": "Matt Quevedo",
+    # }, {
+    #     "id": 6,
+    #     "name": "The Wild Sax Band",
+    # }]
     return render_template('pages/artists.html', artists=data)
 
 
@@ -453,6 +492,17 @@ def create_artist_form():
 def create_artist_submission():
     # called upon submitting the new artist listing form
     # TODO: insert form data as a new Venue record in the db, instead
+    try:
+        name = request.form.get('name', '')
+        city = request.form.get('city', '')
+        state = request.form.get('state', '')
+        phone = request.form.get('phone', '')
+        genres =  request.form.get('genres','')
+        image_link = request.form.get('image_link', '')
+        facebook_link = request.form.get('facebook', '')
+        web_site = request.form.get('web', '')
+        seeking_venue = request.form.get('seeking_venue', '')
+        seeking_description = request.form.get('seeking_description', '')
     # TODO: modify data to be the data object returned from db insertion
 
     # on successful db insert, flash success
