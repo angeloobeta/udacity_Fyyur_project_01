@@ -503,6 +503,8 @@ def create_artist_submission():
         web_site = request.form.get('web', '')
         seeking_venue = request.form.get('seeking_venue', '')
         seeking_description = request.form.get('seeking_description', '')
+        upcoming_shows_count = request.form.get('upcoming_shows_count', '')
+        past_shows_count = request.form.get('past_shows_count', '')
     # TODO: modify data to be the data object returned from db insertion
 
     # on successful db insert, flash success
