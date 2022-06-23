@@ -39,10 +39,9 @@ migration = Migrate(app, db)
 # ----------------------------------------------------------------------------#
 
 class Venue(db.Model):
-    __tablename__ = 'Venue'
-
+    __tablename__ = 'venue'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+    name = db.Column(db.String())
     city = db.Column(db.String(120))
     state = db.Column(db.String(120))
     address = db.Column(db.String(120))
@@ -55,14 +54,13 @@ class Venue(db.Model):
     seeking_description = db.Column(db.Text)
     upcoming_shows_count = db.Column(db.Integer, default=0)
     past_shows_count = db.Column(db.Integer, default=0)
-    shows = db.relationship('Show',  backref=db.backref('venue', lazy=True))
+    show = db.relationship('Shows', backref='venue', lazy=True)
 
 
 class Artist(db.Model):
-    __tablename__ = 'Artist'
-
+    __tablename__ = 'artist'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+    name = db.Column(db.String())
     city = db.Column(db.String(120))
     state = db.Column(db.String(120))
     phone = db.Column(db.String(120))
@@ -76,16 +74,18 @@ class Artist(db.Model):
     seeking_description = db.Column(db.Text)
     upcoming_shows_count = db.Column(db.Integer, default=0)
     past_shows_count = db.Column(db.Integer, default=0)
-    shows = db.relationship('Show', backref=db.backref('artist', lazy=True))
+    show = db.relationship('Shows', backref='artist', lazy=True)
 
 
 # TODO Implement Show and Artist models, and complete all model relationships and properties, as a database migration.
 class Shows(db.Model):
-    __table__ = 'Shows'
+    __tablename__ = 'shows'
     id = db.Column(db.Integer, primary_key=True)
-    venues_id = db.Column(db.Integer, db.ForeignKey('Venue.id'), nullable=False)
-    artists_id = db.Column(db.Integer, db.ForeignKey('Artist.id'), nullable=False)
-    start_time = db.Column(db.String)
+    start_time = db.Column(db.DateTime, nullable=False)
+    venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'), nullable=False)
+    artist_id = db.Column(db.Integer, db.ForeignKey('artist.id'), nullable=False)
+
+
 # ----------------------------------------------------------------------------#
 # Filters.
 # ----------------------------------------------------------------------------#
@@ -264,13 +264,13 @@ def create_venue_submission():
         city = request.form.get('city', '')
         state = request.form.get('state', '')
         address = request.form.get('address', '')
-        phone =  request.form.get('phone', '')
+        phone = request.form.get('phone', '')
         image_link = request.form.get('image_link', '')
         facebook_link = request.form.get('facebook', '')
         seeking_talent = request.form.get('seeking_talent', '')
         seeking_description = request.form.get('seeking_description', '')
         website_link = request.form.get('website_link', '')
-    # TODO: modify data to be the data object returned from db insertion
+        # TODO: modify data to be the data object returned from db insertion
         venue = Venue(name=name,
                       city=city,
                       state=state,
@@ -293,7 +293,7 @@ def create_venue_submission():
         # body['seeking_talent']=venue.seeking_talent
         # body['seeking_description']=venue.seeking_description
         # body['website_link']=venue.website_link
-    # on successful db insert, flash success
+        # on successful db insert, flash success
         flash('Venue ' + request.form['name'] + ' was successfully listed!')
     # TODO: on unsuccessful db insert, flash an error instead.
     except:
@@ -321,7 +321,7 @@ def delete_venue(venue_id):
 @app.route('/artists')
 def artists():
     # TODO: replace with real data returned from querying the database
-    data= Artist.query.get()
+    data = Artist.query.get()
     # data = [{
     #     "id": 4,
     #     "name": "Guns N Petals",
@@ -523,7 +523,7 @@ def edit_venue_submission(venue_id):
         flash('Venue {} wasn\'t updated successfully'.format(venue.name))
     finally:
         db.session.close()
-# venue record with ID <venue_id> using the new attributes
+    # venue record with ID <venue_id> using the new attributes
     return redirect(url_for('show_venue', venue_id=venue_id))
 
 
@@ -543,7 +543,7 @@ def create_artist_submission():
     city = request.form.get('city', '')
     state = request.form.get('state', '')
     phone = request.form.get('phone', '')
-    genres =  request.form.get('genres','')
+    genres = request.form.get('genres', '')
     image_link = request.form.get('image_link', '')
     facebook_link = request.form.get('facebook', '')
     web_site = request.form.get('web', '')
@@ -565,7 +565,7 @@ def create_artist_submission():
     try:
         db.session.add(artist)
         db.session.commit()
-    # on successful db insert, flash success
+        # on successful db insert, flash success
         flash('Artist ' + request.form['name'] + ' was successfully listed!')
     # TODO: on unsuccessful db insert, flash an error instead.
     except:
