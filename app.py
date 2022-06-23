@@ -318,7 +318,7 @@ def create_venue_submission():
                   facebook_link=facebook_link,
                   seeking_talent=seeking_talent,
                   seeking_description=seeking_description,
-                  website_link=website_link)
+                  website=website_link)
     try:
         db.session.add(venue)
         db.session.commit()
@@ -338,7 +338,7 @@ def create_venue_submission():
     except:
         db.session.rollback()
         print(sys.exc_info())
-    # e.g., flash('An error occurred. Venue ' + data.name + ' could not be listed.')
+        flash('An error occurred. Venue ' + venue.name + ' could not be listed.')
     # see: http://flask.pocoo.org/docs/1.0/patterns/flashing/
     finally:
         db.session.close()
@@ -367,9 +367,9 @@ def delete_venue(venue_id):
 @app.route('/artists')
 def artists():
     # TODO: replace with real data returned from querying the database
-    artists = Artist.query.get()
+    artist_data = Artist.query.all()
     data = []
-    for artist in artists:
+    for artist in artist_data:
         data.append({
             "id": artist.id,
             "name": artist.name
