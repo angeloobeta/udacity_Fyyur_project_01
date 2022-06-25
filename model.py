@@ -1,9 +1,13 @@
+from flask_sqlalchemy import SQLAlchemy
 
-
+# Initialized without explicit app (Flask instance)
 
 # ----------------------------------------------------------------------------#
 # Models.
 # ----------------------------------------------------------------------------#
+
+db = SQLAlchemy()
+
 
 class Venue(db.Model):
     __tablename__ = 'venue'
@@ -65,7 +69,6 @@ class Artist(db.Model):
         self.website = website
         self.seeking_venue = seeking_venue
         self.seeking_description = seeking_description
-
 
 
 # TODO Implement Show and Artist models, and complete all model relationships and properties, as a database migration.

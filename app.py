@@ -2,25 +2,23 @@
 # Imports
 # ----------------------------------------------------------------------------#
 
-from flask_migrate import Migrate
-from flask_moment import Moment
-from flask_sqlalchemy import SQLAlchemy
-from logging import Formatter, FileHandler
-from flask_wtf import Form
-from model import db, Venue(), Artist, Shows
-import dateutil.parser
-from forms import *
-import config
-import babel
-import json
+import logging
 import sys
+from logging import Formatter, FileHandler
+
+import babel
+import dateutil.parser
 from flask import (Flask,
                    render_template,
                    request,
-                   Response,
                    flash,
                    redirect,
                    url_for)
+from flask_migrate import Migrate
+from flask_moment import Moment
+
+from forms import *
+from model import db, Venue, Artist, Shows
 
 # ----------------------------------------------------------------------------#
 # App Config.
@@ -29,13 +27,9 @@ moment = Moment(app)
 app.config.from_object('config')
 db.init_app(app)
 migration = Migrate(app, db)
-# ----------------------------------------------------------------------------#
 
-# TODO: connect to a local postgresql database
-app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config.SQLALCHEMY_TRACK_MODIFICATIONS
-app.config['DEBUG'] = config.DEBUG
-migration = Migrate(app, db)
+
+# ----------------------------------------------------------------------------#
 
 
 # ----------------------------------------------------------------------------#
