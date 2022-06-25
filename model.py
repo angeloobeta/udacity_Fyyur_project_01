@@ -1,19 +1,4 @@
-from flask_migrate import Migrate
-from flask_moment import Moment
-from flask_sqlalchemy import SQLAlchemy
-from flask import Flask
-import config
-import app
 
-moment = Moment(app)
-db = SQLAlchemy(app)
-app.config.from_object('config')
-
-# TODO: connect to a local postgresql database
-app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config.SQLALCHEMY_TRACK_MODIFICATIONS
-app.config['DEBUG'] = config.DEBUG
-migration = Migrate(app, db)
 
 
 # ----------------------------------------------------------------------------#
