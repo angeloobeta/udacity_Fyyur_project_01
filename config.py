@@ -20,3 +20,4 @@ SQLALCHEMY_DATABASE_URI = f'postgresql://{username}:{password}@{localhost}:{port
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['DEBUG'] = DEBUG
+app.config['SQLALCHEMY_ECHO'] = True
