@@ -17,6 +17,7 @@ from flask import (Flask,
 from flask_migrate import Migrate
 from flask_moment import Moment
 
+import config
 from forms import *
 from model import db, Venue, Artist, Shows
 
@@ -25,6 +26,12 @@ from model import db, Venue, Artist, Shows
 app = Flask(__name__)
 moment = Moment(app)
 app.config.from_object('config')
+
+app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config.SQLALCHEMY_TRACK_MODIFICATIONS
+app.config['DEBUG'] = config.DEBUG
+app.config['SQLALCHEMY_ECHO'] = config.SQLALCHEMY_ECHO
+
 db.init_app(app)
 migration = Migrate(app, db)
 
